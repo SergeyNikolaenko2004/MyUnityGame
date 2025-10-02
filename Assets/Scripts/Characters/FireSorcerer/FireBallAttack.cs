@@ -23,7 +23,6 @@ public class FireBallAttack : MonoBehaviour, IAbility
     private int abilityIndex = -1;
     private bool isAbilityReady = true;
 
-    // Новые переменные для системы комбо
     private float currentCooldownRemaining = 0f;
     private Coroutine cooldownCoroutine;
 
@@ -56,7 +55,6 @@ public class FireBallAttack : MonoBehaviour, IAbility
         isAbilityReady = currentCooldownRemaining <= 0f && !isAttacking;
     }
 
-    // Новые методы для системы комбо
     public void ReduceCooldown(float reductionMultiplier)
     {
         if (cooldownCoroutine != null && currentCooldownRemaining > 0)
@@ -142,7 +140,6 @@ public class FireBallAttack : MonoBehaviour, IAbility
         yield return new WaitForSeconds(spawnDelay);
         Attack();
 
-        // Запускаем перезарядку
         if (cooldownCoroutine != null)
             StopCoroutine(cooldownCoroutine);
         cooldownCoroutine = StartCoroutine(CooldownCoroutine());
@@ -161,7 +158,6 @@ public class FireBallAttack : MonoBehaviour, IAbility
         bool isFacingLeft = playerSprite.flipX;
         float modifiedDamage = fireBallData.GetModifiedDamage(characterData);
 
-        // Убрали передачу parentAbility - теперь не нужно
         projectile.Initialize(modifiedDamage, enemyTag, isFacingLeft);
 
         if (isFacingLeft)
@@ -173,7 +169,6 @@ public class FireBallAttack : MonoBehaviour, IAbility
 
     IEnumerator CooldownCoroutine(float customCooldown = -1f)
     {
-        // Используем сокращенное время перезарядки
         float cooldownTime = customCooldown > 0 ? customCooldown :
             fireBallData.cooldown * ComboSystem.Instance.GetCooldownReductionMultiplier();
 
@@ -222,7 +217,7 @@ public class FireBallProjectile : MonoBehaviour
             if (health != null)
             {
                 health.TakeDamage(damage);
-                ComboSystem.Instance?.AddCombo(1); // ТОЛЬКО добавляем комбо
+                ComboSystem.Instance?.AddCombo(1);
             }
             Destroy(gameObject);
         }

@@ -25,7 +25,6 @@ public class WaterWaveAttack : MonoBehaviour, IAbility
     private int abilityIndex = -1;
     private bool isAbilityReady = true;
 
-    // Новые переменные для системы комбо
     private float currentCooldownRemaining = 0f;
     private Coroutine cooldownCoroutine;
 
@@ -59,7 +58,6 @@ public class WaterWaveAttack : MonoBehaviour, IAbility
         isAbilityReady = currentCooldownRemaining <= 0f && !isCasting;
     }
 
-    // Новые методы для системы комбо
     public void ReduceCooldown(float reductionMultiplier)
     {
         if (cooldownCoroutine != null && currentCooldownRemaining > 0)
@@ -149,7 +147,6 @@ public class WaterWaveAttack : MonoBehaviour, IAbility
         yield return new WaitForSeconds(delay);
         CreateWaterWave();
 
-        // Запускаем перезарядку с учетом комбо
         if (cooldownCoroutine != null)
             StopCoroutine(cooldownCoroutine);
 
@@ -198,7 +195,6 @@ public class WaterWaveAttack : MonoBehaviour, IAbility
         if (waveController == null) waveController = wave.AddComponent<WaterWaveController>();
 
         float modifiedDamage = abilityData.GetModifiedDamage(characterData);
-        // Убрали передачу parentAbility - теперь не нужно
         waveController.Initialize(modifiedDamage, direction, waveSpeed, waveDistance, knockbackForce);
     }
 
@@ -280,7 +276,6 @@ public class WaterWaveController : MonoBehaviour
                 ApplyKnockback(other);
                 hitsCount++;
 
-                // ТОЛЬКО добавляем комбо - ComboSystem сам применит сокращение
                 ComboSystem.Instance?.AddCombo(1);
             }
         }

@@ -12,8 +12,8 @@ public class UIManager : MonoBehaviour
     public Animator comboAnimator;
 
     [Header("Cooldown Reduction UI")]
-    public TMP_Text cdReductionText; // Добавьте этот элемент в UI
-    public Image cdReductionMeter;   // Добавьте этот элемент в UI
+    public TMP_Text cdReductionText;
+    public Image cdReductionMeter;
 
     void Awake()
     {
@@ -32,17 +32,14 @@ public class UIManager : MonoBehaviour
             comboAnimator.SetTrigger("ComboAdded");
     }
 
-    // ДОБАВЬТЕ ЭТОТ МЕТОД
     public void UpdateCDReduction(float reductionMultiplier)
     {
-        // Если у вас есть текстовое поле для отображения сокращения КД
         if (cdReductionText != null)
         {
             float reductionPercentage = (1 - reductionMultiplier) * 100;
             cdReductionText.text = $"-{reductionPercentage:F1}% CD";
         }
 
-        // Если у вас есть полоска для визуализации сокращения КД
         if (cdReductionMeter != null)
         {
             cdReductionMeter.fillAmount = 1 - reductionMultiplier;

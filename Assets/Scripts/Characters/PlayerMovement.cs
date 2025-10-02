@@ -21,7 +21,6 @@ public class PlayerMovement : MonoBehaviour
     private const string IS_WALKING_PARAM = "IsWalking";
     private const string JUMP_TRIGGER = "Jump";
 
-    // Свойства для клавиш управления
     public KeyCode JumpKey
     {
         get => (KeyCode)PlayerPrefs.GetInt("JumpKey", (int)KeyCode.W);

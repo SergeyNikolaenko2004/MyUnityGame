@@ -334,7 +334,7 @@ public class AbilitySelectionSystem : MonoBehaviour
             }
             else
             {
-                // Очищаем слот
+
                 if (emptySlotSprite != null)
                 {
                     gameplayAbilityImages[i].sprite = emptySlotSprite;

@@ -24,7 +24,6 @@ public class WallOfFireAttack : MonoBehaviour, IAbility
     private int abilityIndex = -1;
     private bool isAbilityReady = true;
 
-    // Новые переменные для системы комбо
     private float currentCooldownRemaining = 0f;
     private Coroutine cooldownCoroutine;
     private WallOfFireController activeWall;
@@ -58,8 +57,6 @@ public class WallOfFireAttack : MonoBehaviour, IAbility
     {
         isAbilityReady = currentCooldownRemaining <= 0f && !isCasting;
     }
-
-    // Новые методы для системы комбо
     public void ReduceCooldown(float reductionMultiplier)
     {
         if (cooldownCoroutine != null && currentCooldownRemaining > 0)
@@ -149,7 +146,6 @@ public class WallOfFireAttack : MonoBehaviour, IAbility
         yield return new WaitForSeconds(delay);
         CreateWall();
 
-        // Запускаем перезарядку с учетом комбо
         if (cooldownCoroutine != null)
             StopCoroutine(cooldownCoroutine);
 
@@ -200,7 +196,6 @@ public class WallOfFireAttack : MonoBehaviour, IAbility
         wallController.Initialize(modifiedDamage, wallDuration);
     }
 
-    // Метод для применения сокращения КД из контроллера стены
     public void ApplyCooldownReductionFromWall()
     {
         if (ComboSystem.Instance != null)
@@ -285,7 +280,6 @@ public class WallOfFireController : MonoBehaviour
 
     void Update()
     {
-        // Постоянный урон врагам в зоне стены
         if (Time.time - lastDamageTime >= damageInterval && damagedEnemies.Count > 0)
         {
             lastDamageTime = Time.time;
@@ -311,17 +305,14 @@ public class WallOfFireController : MonoBehaviour
                 health.TakeDamage(damage * damageInterval);
                 totalHits++;
 
-                // ТОЛЬКО добавляем комбо - ComboSystem сам применит сокращение
                 ComboSystem.Instance?.AddCombo(1);
             }
         }
 
-        // Удаляем уничтоженных врагов
         foreach (var enemy in enemiesToRemove)
         {
             damagedEnemies.Remove(enemy);
         }
     }
 
-    // УДАЛИТЕ метод OnDestroy() - он больше не нужен
 }

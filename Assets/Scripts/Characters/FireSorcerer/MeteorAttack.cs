@@ -25,7 +25,6 @@ public class MeteorAttack : MonoBehaviour, IAbility
     private int abilityIndex = -1;
     private bool isAbilityReady = true;
 
-    // Новые переменные для системы комбо
     private float currentCooldownRemaining = 0f;
     private Coroutine cooldownCoroutine;
     private float originalCooldown;
@@ -61,7 +60,6 @@ public class MeteorAttack : MonoBehaviour, IAbility
         isAbilityReady = currentCooldownRemaining <= 0f;
     }
 
-    // Реализация методов интерфейса IAbility для системы комбо
     public void ReduceCooldown(float reductionMultiplier)
     {
         if (cooldownCoroutine != null && currentCooldownRemaining > 0)
@@ -147,7 +145,6 @@ public class MeteorAttack : MonoBehaviour, IAbility
         yield return new WaitForSeconds(delay);
         CreateMeteor();
 
-        // Запускаем перезарядку с учетом комбо
         if (cooldownCoroutine != null)
             StopCoroutine(cooldownCoroutine);
 
@@ -257,7 +254,6 @@ public class MeteorProjectile : MonoBehaviour
                     health.TakeDamage(damage);
                     damagedEnemies.Add(other.gameObject);
 
-                    // ДОБАВЛЯЕМ КОМБО ЗА ПОПАДАНИЕ
                     ComboSystem.Instance?.AddCombo(1);
                 }
             }

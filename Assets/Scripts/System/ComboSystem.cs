@@ -54,7 +54,6 @@ public class ComboSystem : MonoBehaviour
         UIManager.Instance?.UpdateComboCounter(currentCombo);
         UIManager.Instance?.UpdateCDReduction(GetCooldownReductionMultiplier());
 
-        // Применяем сокращение перезарядки ко всем способностям
         ApplyCooldownReductionToAllAbilities();
     }
 

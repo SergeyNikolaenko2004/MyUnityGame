@@ -193,7 +193,6 @@ public class FrostCalmAttack : MonoBehaviour, IAbility
         wallController.Initialize(modifiedDamage, wallDuration);
     }
 
-    // Метод для применения сокращения КД из контроллера стены
     public void ApplyCooldownReductionFromWall(int hitCount)
     {
         if (ComboSystem.Instance != null && hitCount > 0)
@@ -261,7 +260,6 @@ public class FrostCalmController : MonoBehaviour
 
     void Update()
     {
-        // Постоянный урон врагам в зоне
         if (Time.time - lastDamageTime >= damageInterval && damagedEnemies.Count > 0)
         {
             lastDamageTime = Time.time;
@@ -287,12 +285,10 @@ public class FrostCalmController : MonoBehaviour
                 health.TakeDamage(damage * damageInterval);
                 totalHits++;
 
-                // ТОЛЬКО добавляем комбо - ComboSystem сам применит сокращение
                 ComboSystem.Instance?.AddCombo(1);
             }
         }
 
-        // Удаляем уничтоженных врагов
         foreach (var enemy in enemiesToRemove)
         {
             damagedEnemies.Remove(enemy);
@@ -315,5 +311,4 @@ public class FrostCalmController : MonoBehaviour
         }
     }
 
-    // УДАЛИТЕ метод OnDestroy() - он больше не нужен
 }

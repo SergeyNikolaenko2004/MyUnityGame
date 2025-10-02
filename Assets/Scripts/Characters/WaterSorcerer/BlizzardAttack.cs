@@ -7,7 +7,7 @@ public class BlizzardAttack : MonoBehaviour, IAbility
     [Header("Required References")]
     public CharacterData characterData;
     public AbilityData abilityData;
-    public GameObject freezeEffectPrefab; // Префаб эффекта заморозки экрана
+    public GameObject freezeEffectPrefab; 
     public Animator animator;
 
     [Header("Area Attack Settings")]
@@ -22,7 +22,6 @@ public class BlizzardAttack : MonoBehaviour, IAbility
     private int abilityIndex = -1;
     private bool isAbilityReady = true;
 
-    // Новые переменные для системы комбо
     private float currentCooldownRemaining = 0f;
     private Coroutine cooldownCoroutine;
 
@@ -53,7 +52,6 @@ public class BlizzardAttack : MonoBehaviour, IAbility
         isAbilityReady = currentCooldownRemaining <= 0f && !isCasting;
     }
 
-    // Новые методы для системы комбо
     public void ReduceCooldown(float reductionMultiplier)
     {
         if (cooldownCoroutine != null && currentCooldownRemaining > 0)
@@ -139,7 +137,6 @@ public class BlizzardAttack : MonoBehaviour, IAbility
         yield return new WaitForSeconds(delay);
         CastBlizzard();
 
-        // Запускаем перезарядку
         if (cooldownCoroutine != null)
             StopCoroutine(cooldownCoroutine);
         cooldownCoroutine = StartCoroutine(CooldownCoroutine());
@@ -168,8 +165,6 @@ public class BlizzardAttack : MonoBehaviour, IAbility
         int hitCount = DealAreaDamage();
         CreateFreezeEffect();
 
-        // УБРАТЬ применение сокращения - ComboSystem сделает это сам
-        // когда добавит комбо через DealAreaDamage()
     }
 
     int DealAreaDamage()
@@ -187,7 +182,7 @@ public class BlizzardAttack : MonoBehaviour, IAbility
                 {
                     health.TakeDamage(modifiedDamage);
                     hitCount++;
-                    ComboSystem.Instance?.AddCombo(1); // ТОЛЬКО добавляем комбо
+                    ComboSystem.Instance?.AddCombo(1);
                 }
             }
         }
@@ -198,7 +193,6 @@ public class BlizzardAttack : MonoBehaviour, IAbility
     {
         if (freezeEffectPrefab != null)
         {
-            // эффект заморозки
             GameObject freezeEffect = Instantiate(freezeEffectPrefab);
             freezeEffect.transform.SetParent(FindAnyObjectByType<Canvas>().transform, false);
 

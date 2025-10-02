@@ -125,7 +125,6 @@ public class BlastWaveAttack : MonoBehaviour, IAbility
         animator.SetTrigger("BlastOfWaveAttack");
         StartCoroutine(CastWithDelay(castAnimationDelay));
 
-        // Запускаем перезарядку
         if (cooldownCoroutine != null)
             StopCoroutine(cooldownCoroutine);
 
@@ -191,17 +190,15 @@ public class BlastWaveAttack : MonoBehaviour, IAbility
         waveController.Initialize(damage);
     }
 
-    // Реализация метода из интерфейса IAbility
     public void ReduceCooldown(float reductionMultiplier)
     {
         if (cooldownCoroutine != null && !isAbilityReady)
         {
             StopCoroutine(cooldownCoroutine);
 
-            // Применяем сокращение к оставшемуся времени перезарядки
             currentCooldownRemaining *= reductionMultiplier;
 
-            // Перезапускаем перезарядку с новым временем
+
             cooldownCoroutine = StartCoroutine(CooldownCoroutine(currentCooldownRemaining));
         }
     }
@@ -270,12 +267,10 @@ public class BlastWaveController : MonoBehaviour
                 health.TakeDamage(damage);
                 damagedEnemies.Add(other);
 
-                // Добавляем комбо за попадание
                 ComboSystem.Instance?.AddCombo(1);
             }
         }
     }
 
-    // УБРАТЬ метод OnDestroy и ApplyCooldownReduction!
-    // Сокращение перезарядки теперь обрабатывается в ComboSystem
+
 }

@@ -23,7 +23,6 @@ public class FrostBoltAttack : MonoBehaviour, IAbility
     private int abilityIndex = -1;
     private bool isAbilityReady = true;
 
-    // Новые переменные для системы комбо
     private float currentCooldownRemaining = 0f;
     private Coroutine cooldownCoroutine;
 
@@ -56,7 +55,6 @@ public class FrostBoltAttack : MonoBehaviour, IAbility
         isAbilityReady = currentCooldownRemaining <= 0f && !isAttacking;
     }
 
-    // Новые методы для системы комбо
     public void ReduceCooldown(float reductionMultiplier)
     {
         if (cooldownCoroutine != null && currentCooldownRemaining > 0)
@@ -142,7 +140,6 @@ public class FrostBoltAttack : MonoBehaviour, IAbility
         yield return new WaitForSeconds(spawnDelay);
         Attack();
 
-        // Запускаем перезарядку с учетом комбо
         if (cooldownCoroutine != null)
             StopCoroutine(cooldownCoroutine);
 
@@ -182,7 +179,6 @@ public class FrostBoltAttack : MonoBehaviour, IAbility
         bool isFacingLeft = playerSprite.flipX;
         float modifiedDamage = frostboltData.GetModifiedDamage(characterData);
 
-        // Убрали передачу parentAbility - теперь не нужно
         projectile.Initialize(modifiedDamage, enemyTag, isFacingLeft);
 
         if (isFacingLeft)
@@ -223,7 +219,6 @@ public class FrostBoltProjectile : MonoBehaviour
             {
                 health.TakeDamage(damage);
 
-                // ТОЛЬКО добавляем комбо - ComboSystem сам применит сокращение
                 ComboSystem.Instance?.AddCombo(1);
             }
             Destroy(gameObject);
