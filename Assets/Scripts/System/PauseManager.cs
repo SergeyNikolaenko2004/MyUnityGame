@@ -270,8 +270,13 @@ public class PauseManager : MonoBehaviour
         Time.timeScale = 1f;
         isPaused = false;
 
-        SceneManager.LoadScene("MainMenu");
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            Destroy(player);
+        }
 
+        SceneManager.LoadScene("MainMenu");
         pauseMenu.SetActive(false);
         CloseAllSettingsPanels();
     }

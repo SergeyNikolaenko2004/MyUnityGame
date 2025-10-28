@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 [DisallowMultipleComponent]
 public class HealthSystem : MonoBehaviour
@@ -11,10 +12,10 @@ public class HealthSystem : MonoBehaviour
     public float MaxHealth => maxHealth;
     public float CurrentHealth => currentHealth;
 
-    [Header("Health Bar UI")]
-    [SerializeField] private Slider healthSlider;
-    [SerializeField] private bool alwaysShowHealthBar = false;
-    [SerializeField] private GameObject healthBarCanvas;
+    [Header("Health UI (из чужого кода)")]
+    public Image currentHealthBar;    // Health Bar
+    public Image currentHealthGlobe;  // Health Globe  
+    public TMP_Text healthText;       // Health Text
 
     [Header("Damage Text Settings")]
     [SerializeField] private GameObject damageTextPrefab;
@@ -27,27 +28,19 @@ public class HealthSystem : MonoBehaviour
             currentHealth = maxHealth;
         }
 
-        InitializeHealthBar();
+        InitializeHealthUI();
     }
 
-    private void InitializeHealthBar()
+    private void InitializeHealthUI()
     {
-        if (healthSlider != null)
-        {
-            healthSlider.maxValue = maxHealth;
-            healthSlider.value = currentHealth;
-
-            if (healthBarCanvas != null)
-            {
-                healthBarCanvas.SetActive(alwaysShowHealthBar);
-            }
-        }
+        // Инициализация из чужого кода
+        UpdateGraphics();
     }
 
     public void TakeDamage(float damage)
     {
         currentHealth = Mathf.Max(0, currentHealth - damage);
-        UpdateHealthBar();
+        UpdateGraphics(); // Обновляем графику из чужого кода
 
         Debug.Log($"{name} получил {damage} урона. Осталось HP: {currentHealth}");
 
@@ -55,56 +48,92 @@ public class HealthSystem : MonoBehaviour
         {
             Die();
         }
+        else
+        {
+            StartCoroutine(PlayerHurts());
+        }
     }
 
     protected virtual void Die()
     {
         Debug.Log($"{name} уничтожен!");
-        Destroy(gameObject);
+        StartCoroutine(PlayerDied());
     }
 
     public void SetHealth(float newMaxHealth, bool resetCurrent = true)
     {
         maxHealth = newMaxHealth;
         if (resetCurrent) currentHealth = maxHealth;
-        UpdateHealthBar();
+        UpdateGraphics(); // Обновляем графику из чужого кода
     }
 
-    private void UpdateHealthBar()
+    //==============================================================
+    // Функции из чужого кода для работы с Health Bar и Globe
+    //==============================================================
+    private void UpdateHealthBarUI()
     {
-        if (healthSlider != null)
+        if (currentHealthBar != null)
         {
-            healthSlider.value = currentHealth;
-
-            if (!alwaysShowHealthBar && healthBarCanvas != null)
-            {
-                healthBarCanvas.SetActive(true);
-                CancelInvoke(nameof(HideHealthBar));
-                Invoke(nameof(HideHealthBar), 2f);
-            }
+            float ratio = currentHealth / maxHealth;
+            currentHealthBar.rectTransform.localPosition = new Vector3(
+                currentHealthBar.rectTransform.rect.width * ratio - currentHealthBar.rectTransform.rect.width, 0, 0);
         }
     }
 
-    private void HideHealthBar()
+    private void UpdateHealthGlobeUI()
     {
-        if (healthBarCanvas != null && !alwaysShowHealthBar)
+        if (currentHealthGlobe != null)
         {
-            healthBarCanvas.SetActive(false);
+            float ratio = currentHealth / maxHealth;
+            currentHealthGlobe.rectTransform.localPosition = new Vector3(
+                0, currentHealthGlobe.rectTransform.rect.height * ratio - currentHealthGlobe.rectTransform.rect.height, 0);
         }
+    }
+
+    private void UpdateHealthTextUI()
+    {
+        if (healthText != null)
+        {
+            healthText.text = currentHealth.ToString("0") + "/" + maxHealth.ToString("0");
+        }
+    }
+
+    private void UpdateGraphics()
+    {
+        UpdateHealthBarUI();
+        UpdateHealthGlobeUI();
+        UpdateHealthTextUI();
+    }
+
+    //==============================================================
+    // Coroutine из чужого кода
+    //==============================================================
+    IEnumerator PlayerHurts()
+    {
+        // Player gets hurt. Do stuff.. play anim, sound..
+        // PopupText.Instance.Popup("Ouch!", 1f, 1f); // Раскомментируйте если нужно
+
+        yield return null;
+    }
+
+    IEnumerator PlayerDied()
+    {
+        // Player is dead. Do stuff.. play anim, sound..
+        // PopupText.Instance.Popup("You have died!", 1f, 1f); // Раскомментируйте если нужно
+
+        yield return null;
+        Destroy(gameObject);
     }
 
     public void Heal(float amount)
     {
         currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
-        UpdateHealthBar();
+        UpdateGraphics(); // Обновляем графику из чужого кода
     }
 
     private void OnValidate()
     {
-        if (healthSlider != null)
-        {
-            healthSlider.maxValue = maxHealth;
-            healthSlider.value = currentHealth;
-        }
+        // Валидация для нового UI
+        UpdateGraphics();
     }
 }
