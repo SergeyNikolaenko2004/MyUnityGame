@@ -63,7 +63,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void CheckGrounded()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        // Добавьте проверку на собственный коллайдер
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, groundCheckRadius, groundLayer);
+        isGrounded = false;
+
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider != null && collider.gameObject != gameObject)
+            {
+                isGrounded = true;
+                break;
+            }
+        }
     }
 
     private void HandleMovement()

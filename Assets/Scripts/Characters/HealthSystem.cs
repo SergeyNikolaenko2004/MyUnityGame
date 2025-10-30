@@ -13,9 +13,9 @@ public class HealthSystem : MonoBehaviour
     public float CurrentHealth => currentHealth;
 
     [Header("Health UI (из чужого кода)")]
-    public Image currentHealthBar;    // Health Bar
-    public Image currentHealthGlobe;  // Health Globe  
-    public TMP_Text healthText;       // Health Text
+    public Image currentHealthBar;    
+    public Image currentHealthGlobe; 
+    public TMP_Text healthText;     
 
     [Header("Damage Text Settings")]
     [SerializeField] private GameObject damageTextPrefab;
@@ -33,14 +33,13 @@ public class HealthSystem : MonoBehaviour
 
     private void InitializeHealthUI()
     {
-        // Инициализация из чужого кода
         UpdateGraphics();
     }
 
     public void TakeDamage(float damage)
     {
         currentHealth = Mathf.Max(0, currentHealth - damage);
-        UpdateGraphics(); // Обновляем графику из чужого кода
+        UpdateGraphics();
 
         Debug.Log($"{name} получил {damage} урона. Осталось HP: {currentHealth}");
 
@@ -64,12 +63,8 @@ public class HealthSystem : MonoBehaviour
     {
         maxHealth = newMaxHealth;
         if (resetCurrent) currentHealth = maxHealth;
-        UpdateGraphics(); // Обновляем графику из чужого кода
+        UpdateGraphics(); 
     }
-
-    //==============================================================
-    // Функции из чужого кода для работы с Health Bar и Globe
-    //==============================================================
     private void UpdateHealthBarUI()
     {
         if (currentHealthBar != null)
@@ -104,23 +99,13 @@ public class HealthSystem : MonoBehaviour
         UpdateHealthGlobeUI();
         UpdateHealthTextUI();
     }
-
-    //==============================================================
-    // Coroutine из чужого кода
-    //==============================================================
     IEnumerator PlayerHurts()
     {
-        // Player gets hurt. Do stuff.. play anim, sound..
-        // PopupText.Instance.Popup("Ouch!", 1f, 1f); // Раскомментируйте если нужно
-
         yield return null;
     }
 
     IEnumerator PlayerDied()
     {
-        // Player is dead. Do stuff.. play anim, sound..
-        // PopupText.Instance.Popup("You have died!", 1f, 1f); // Раскомментируйте если нужно
-
         yield return null;
         Destroy(gameObject);
     }
@@ -128,12 +113,11 @@ public class HealthSystem : MonoBehaviour
     public void Heal(float amount)
     {
         currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
-        UpdateGraphics(); // Обновляем графику из чужого кода
+        UpdateGraphics();
     }
 
     private void OnValidate()
     {
-        // Валидация для нового UI
         UpdateGraphics();
     }
 }

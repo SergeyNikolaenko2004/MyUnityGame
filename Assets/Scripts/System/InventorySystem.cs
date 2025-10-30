@@ -179,6 +179,8 @@ public class InventorySystem : MonoBehaviour
 
         if (isInventoryOpen)
         {
+            // —брасываем ввод и таймер навигации
+            ResetNavigationInput();
             ShowStatsPage();
             UpdateStatsUI();
             GameStateManager.Instance.SetState(GameStateManager.GameState.InventoryOpen);
@@ -197,6 +199,12 @@ public class InventorySystem : MonoBehaviour
 
             isOnTabNavigation = true;
         }
+    }
+
+    void ResetNavigationInput()
+    {
+        lastNavigationTime = Time.unscaledTime + navigationDelay;   
+        Input.ResetInputAxes();
     }
 
     public void UpdateStatsUI()
