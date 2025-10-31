@@ -16,12 +16,12 @@ MonoBehaviour:
   icon: {fileID: 0}
   characterPrefab: {fileID: 9181285245483939001, guid: 09e826eb6c50afd44bfdc6398bda4d4b, type: 3}
   abilities:
-  - {fileID: 11400000, guid: 2d863e20f6ff28a4990779ca9a27036b, type: 2}
-  - {fileID: 11400000, guid: 1a2f1a9aaf96f4b42baa87a1252fde8b, type: 2}
-  - {fileID: 11400000, guid: 62c181e527e683e4a975b2e1f115adbd, type: 2}
   - {fileID: 11400000, guid: a369e7be8003d1347bd0f18799f1f8b0, type: 2}
+  - {fileID: 11400000, guid: 62c181e527e683e4a975b2e1f115adbd, type: 2}
+  - {fileID: 11400000, guid: 1a2f1a9aaf96f4b42baa87a1252fde8b, type: 2}
+  - {fileID: 11400000, guid: 2d863e20f6ff28a4990779ca9a27036b, type: 2}
   elementalStats:
-    fireLevel: 0
+    fireLevel: 1
     waterLevel: 0
     earthLevel: 0
     windLevel: 0

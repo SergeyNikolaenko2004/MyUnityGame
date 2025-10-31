@@ -15,10 +15,10 @@ public class CharacterData : ScriptableObject
     [System.Serializable]
     public class ElementalStats
     {
-        [Range(0, 5)] public int fireLevel = 0;
-        [Range(0, 5)] public int waterLevel = 0;
-        [Range(0, 5)] public int earthLevel = 0;
-        [Range(0, 5)] public int windLevel = 0;
+        [Range(1, 5)] public int fireLevel = 1;
+        [Range(1, 5)] public int waterLevel = 1;
+        [Range(1, 5)] public int earthLevel = 1;
+        [Range(1, 5)] public int windLevel = 1;
 
         public int GetElementLevel(ElementType element)
         {
@@ -28,7 +28,7 @@ public class CharacterData : ScriptableObject
                 ElementType.Water => waterLevel,
                 ElementType.Earth => earthLevel,
                 ElementType.Wind => windLevel,
-                _ => 0
+                _ => 1
             };
         }
 

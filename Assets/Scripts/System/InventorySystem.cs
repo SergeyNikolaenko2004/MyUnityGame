@@ -179,11 +179,17 @@ public class InventorySystem : MonoBehaviour
 
         if (isInventoryOpen)
         {
-            // Сбрасываем ввод и таймер навигации
             ResetNavigationInput();
             ShowStatsPage();
             UpdateStatsUI();
             GameStateManager.Instance.SetState(GameStateManager.GameState.InventoryOpen);
+
+            // Обновляем отображение урона способностей при открытии инвентаря
+            AbilitySelectionSystem abilitySystem = FindObjectOfType<AbilitySelectionSystem>();
+            if (abilitySystem != null)
+            {
+                abilitySystem.UpdateAllAbilityDamageDisplays();
+            }
 
             if (playerMovement != null)
                 playerMovement.SetCanMove(false);
@@ -298,6 +304,14 @@ public class InventorySystem : MonoBehaviour
             {
                 playerData.elementalStats.UpgradeElement(element);
                 UpdateStatsUI();
+
+                // Обновляем отображение урона способностей
+                AbilitySelectionSystem abilitySystem = FindObjectOfType<AbilitySelectionSystem>();
+                if (abilitySystem != null)
+                {
+                    abilitySystem.UpdateAllAbilityDamageDisplays();
+                }
+
                 Debug.Log($"Улучшена стихия {element} до уровня {playerData.elementalStats.GetElementLevel(element)}");
             }
         }

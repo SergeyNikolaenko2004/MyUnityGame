@@ -285,6 +285,26 @@ public class AbilitySelectionSystem : MonoBehaviour
         }
     }
 
+    public void UpdateAllAbilityDamageDisplays()
+    {
+        foreach (var abilityButton in abilityButtons)
+        {
+            if (abilityButton != null)
+            {
+                abilityButton.UpdateDamageDisplay();
+            }
+        }
+
+        foreach (var slotButton in slotButtons)
+        {
+            if (slotButton != null && slotButton.GetAbilityData() != null)
+            {
+                slotButton.UpdateDamageDisplay();
+            }
+        }
+    }
+
+    // Обновите метод UpdateUI
     void UpdateUI()
     {
         Debug.Log($"Обновление UI: выбрано {selectedAbilities.Count} способностей");
@@ -310,6 +330,7 @@ public class AbilitySelectionSystem : MonoBehaviour
             {
                 bool isSelected = selectedAbilities.Contains(abilityData);
                 abilityButton.SetSelected(isSelected);
+                abilityButton.UpdateDamageDisplay(); // Обновляем отображение урона
                 Debug.Log($"Кнопка {abilityData.abilityName}: выбрана = {isSelected}");
             }
         }

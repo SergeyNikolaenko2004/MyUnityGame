@@ -16,18 +16,16 @@ public class AbilityButton : MonoBehaviour
     private AbilitySelectionSystem selectionSystem;
     private bool isSlot = false;
     private int slotIndex = -1;
+    private CharacterData playerData;
 
     public void Initialize(AbilityData data, AbilitySelectionSystem system, bool isSlotButton)
     {
         abilityData = data;
         selectionSystem = system;
         isSlot = isSlotButton;
+        playerData = system.playerData; // Получаем ссылку на playerData
 
-        if (abilityIcon != null && data.icon != null)
-            abilityIcon.sprite = data.icon;
-        if (abilityNameText != null) abilityNameText.text = data.abilityName;
-        if (elementText != null) elementText.text = data.element.ToString();
-        if (damageText != null) damageText.text = $"Урон: {data.baseDamage}";
+        UpdateUI();
 
         if (button != null) button.onClick.AddListener(OnClick);
         if (selectedIndicator != null) selectedIndicator.SetActive(false);
@@ -38,6 +36,7 @@ public class AbilityButton : MonoBehaviour
         isSlot = true;
         slotIndex = index;
         selectionSystem = system;
+        playerData = system.playerData; // Получаем ссылку на playerData
 
         if (abilityIcon != null) abilityIcon.sprite = null;
         if (abilityNameText != null) abilityNameText.text = $"";
@@ -51,11 +50,7 @@ public class AbilityButton : MonoBehaviour
     public void SetAbility(AbilityData data)
     {
         abilityData = data;
-        if (abilityIcon != null && data.icon != null)
-            abilityIcon.sprite = data.icon;
-        if (abilityNameText != null) abilityNameText.text = data.abilityName;
-        if (elementText != null) elementText.text = data.element.ToString();
-        if (damageText != null) damageText.text = $"Урон: {data.baseDamage}";
+        UpdateUI(); // Обновляем UI при установке способности
         if (selectedIndicator != null) selectedIndicator.SetActive(true);
     }
 
@@ -80,6 +75,62 @@ public class AbilityButton : MonoBehaviour
     public AbilityData GetAbilityData()
     {
         return abilityData;
+    }
+
+    // Новый метод для обновления урона в зависимости от уровня стихии
+    public void UpdateDamageDisplay()
+    {
+        if (abilityData != null && damageText != null && playerData != null)
+        {
+            int currentDamage = CalculateCurrentDamage();
+            damageText.text = $"Урон: {currentDamage}";
+        }
+    }
+
+    // Расчет текущего урона с учетом уровня стихии
+    private int CalculateCurrentDamage()
+    {
+        if (abilityData == null || playerData == null)
+            return (int)(abilityData != null ? abilityData.baseDamage : 0);
+
+        int elementLevel = GetElementLevel(abilityData.element);
+        float multiplier = GetDamageMultiplier(elementLevel);
+
+        return Mathf.RoundToInt(abilityData.baseDamage * multiplier);
+    }
+
+    private int GetElementLevel(ElementType element)
+    {
+        switch (element)
+        {
+            case ElementType.Fire: return playerData.elementalStats.fireLevel;
+            case ElementType.Water: return playerData.elementalStats.waterLevel;
+            case ElementType.Earth: return playerData.elementalStats.earthLevel;
+            case ElementType.Wind: return playerData.elementalStats.windLevel;
+            default: return 1;
+        }
+    }
+
+    private float GetDamageMultiplier(int elementLevel)
+    {
+        // Формула множителя урона в зависимости от уровня стихии
+        // Например: уровень 1 = 100%, уровень 2 = 130%, уровень 3 = 160% и т.д.
+        return 1f + (elementLevel) * 0.4f;
+    }
+
+    // Обновление всего UI
+    private void UpdateUI()
+    {
+        if (abilityData == null) return;
+
+        if (abilityIcon != null && abilityData.icon != null)
+            abilityIcon.sprite = abilityData.icon;
+        if (abilityNameText != null)
+            abilityNameText.text = abilityData.abilityName;
+        if (elementText != null)
+            elementText.text = abilityData.element.ToString();
+
+        UpdateDamageDisplay(); // Используем новый метод для отображения урона
     }
 
     void OnClick()
